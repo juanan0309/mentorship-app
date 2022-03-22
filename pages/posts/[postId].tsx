@@ -29,7 +29,7 @@ export const getStaticProps: GetStaticProps = async (context: any) => {
 }
 
 export const getStaticPaths: GetStaticPaths = async() => {
-  let posts = await getAllPosts()
+  let {posts} = await getAllPosts()
   posts = JSON.parse(JSON.stringify(posts))
   const paths = posts.map((post: any) => {
     return {

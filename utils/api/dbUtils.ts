@@ -9,12 +9,13 @@ export async function connectDatabase() {
   return client
 }
 
-export async function getAllPosts(sort?: string) {
+export async function getAllPosts( limit: number = 10, skip: number = 0) {
   const client = await connectDatabase()
 
-  const posts = await Post.find({}).lean()
+  const totalCount = await Post.count()
+  const posts = await Post.find({}).limit(limit).skip(skip).lean()
   client.disconnect()
-  return posts
+  return {posts, totalCount}
 }
 
 export async function getPostById(id: string) {
