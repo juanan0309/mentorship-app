@@ -1,5 +1,4 @@
 import { ReactNode } from 'react'
-import type { AppProps } from 'next/app'
 import NavBar from './NavBar'
 
 interface LayoutProps {

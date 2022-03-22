@@ -1,6 +1,17 @@
-const ContentList = () => {
+import { useContext } from 'react'
+import ItemCard from '../ItemCard'
+
+type iContentListProps = {
+  items: any
+}
+
+const ContentList = ({ items }: iContentListProps) => {
   return (
-    <div>Context List</div>
+    <>
+      {items.map((item: any) => (
+        <ItemCard key={item._id} {...item} />
+      ))}
+    </>
   )
 }
 
