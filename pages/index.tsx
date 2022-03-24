@@ -1,6 +1,8 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useState, useEffect } from 'react'
-import { NextPage, GetStaticProps } from 'next'
+import { NextPage, GetServerSideProps } from 'next'
 import { useRouter } from 'next/router'
+import { getSession } from 'next-auth/react'
 import { ReactNode } from 'react'
 import ContentList from '../components/ContentList'
 import SearchBar from '../components/SearchBar'
@@ -9,25 +11,24 @@ import styles from '../styles/Home.module.css'
 import PaginationButtons from '../components/PaginationButtons'
 
 type iProps = {
-  posts: any
+  posts: unknown
   totalCount: number
   children?: ReactNode
 }
 
 const Home: NextPage<iProps> = (props: iProps) => {
-  const { totalCount } = props
   const router = useRouter()
+  const {posts : initialPosts} = props
   const page = router.query.page || 1
-  const [posts, setPosts] = useState(props.posts)
+  const [totalCount, setTotalCount] = useState(props.totalCount)
+  const [posts, setPosts] = useState(initialPosts)
+  const [isFetching, setIsFetching] = useState(false)
 
   useEffect(() => {
-    fetch(`/api/posts?page=${page}`)
-      .then(res => res.json())
-      .then(data => {
-        setPosts(data.posts)
-      }
-    )
-  }, [page])
+    console.log(initialPosts)
+    setPosts(initialPosts)
+    setIsFetching(false)
+  }, [initialPosts])
 
   const handleNextPage = () => {
     router.push(`?page=${+page + 1}`)
@@ -42,7 +43,7 @@ const Home: NextPage<iProps> = (props: iProps) => {
 
   return (
     <div className={styles.container}>
-      <SearchBar />
+      <SearchBar setPosts={setPosts} setTotalCount={setTotalCount}/>
       <ContentList items={posts} />
       <PaginationButtons
         handleNextPage={handleNextPage}
@@ -54,8 +55,16 @@ const Home: NextPage<iProps> = (props: iProps) => {
   )
 }
 
-export const getStaticProps: GetStaticProps = async () => {
-  let { posts, totalCount } = await getAllPosts()
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const session = await getSession(context)
+  if (!session) {
+    context.res.writeHead(302, { Location: '/login' })
+    context.res.end()
+    return { props: { posts: [], totalCount: 0 } }
+  }
+  const page = context.query?.page || 1
+  const skip = (+page - 1) * 10
+  let {posts, totalCount} = await getAllPosts(10, skip)
   posts = JSON.parse(JSON.stringify(posts))
 
   return {
@@ -63,7 +72,6 @@ export const getStaticProps: GetStaticProps = async () => {
       posts,
       totalCount,
     },
-    revalidate: 60,
   }
 }
 
