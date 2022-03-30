@@ -1,5 +1,6 @@
 import { Button } from '@mui/material'
-import React, { Dispatch, SetStateAction } from 'react'
+
+import classes from './PaginationButtons.module.css'
 
 type iProps = {
   handleNextPage: () => void
@@ -17,7 +18,7 @@ const PaginationButtons = (props: iProps) => {
   } = props
 
   return (
-    <div>
+    <div className={classes.container}>
       <Button
         variant="contained"
         color="primary"

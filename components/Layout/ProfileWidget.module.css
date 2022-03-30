@@ -1,0 +1,7 @@
+.widgetContainer {
+    width: 70px;
+    height: 70px;
+    cursor: pointer;
+    border-radius: 50%;
+    overflow: hidden;
+}

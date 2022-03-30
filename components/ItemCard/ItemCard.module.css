@@ -1,0 +1,14 @@
+.container {
+    margin-bottom: 5px;
+}
+
+.likes-container {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+.likes-container span {
+    margin-left: 5px;
+}

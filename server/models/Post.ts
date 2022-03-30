@@ -11,8 +11,12 @@ const postSchema = new mongoose.Schema(
       required: true,
     },
     likes: {
-        type: Number,
-        default: 0,
+      count: { type: Number, default: 0 },
+      users: { type: [String], default: [] },
+    },
+    ownerId: {
+      type: String,
+      required: true,
     }
   },
   {
@@ -20,4 +24,4 @@ const postSchema = new mongoose.Schema(
   },
 )
 
-export const Post = mongoose.models.Post || mongoose.model("Post", postSchema)
+export const Post = mongoose.models.Post || mongoose.model('Post', postSchema)

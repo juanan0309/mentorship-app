@@ -13,7 +13,16 @@ export default function Login() {
         <>
           Not signed in <br />
           <div id="my-signin2"></div>
-          <button onClick={() => signIn('google')}>Sign in</button>
+          <button
+            onClick={() =>
+              signIn('google', {
+                callbackUrl:
+                  process.env.NEXT_PUBLIC_VERCEL_URL || 'http://localhost:3000',
+              })
+            }
+          >
+            Sign in
+          </button>
         </>
       )}
       {session && (

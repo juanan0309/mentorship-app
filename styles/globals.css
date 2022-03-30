@@ -1,3 +1,8 @@
+* {
+  --background-gray-color: #F1F4F4;
+  --red-primary-color: #E94E44;
+}
+
 html,
 body {
   padding: 0;

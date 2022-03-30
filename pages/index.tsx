@@ -25,7 +25,6 @@ const Home: NextPage<iProps> = (props: iProps) => {
   const [isFetching, setIsFetching] = useState(false)
 
   useEffect(() => {
-    console.log(initialPosts)
     setPosts(initialPosts)
     setIsFetching(false)
   }, [initialPosts])

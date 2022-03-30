@@ -1,4 +1,3 @@
-import { useContext } from 'react'
 import ItemCard from '../ItemCard'
 
 type iContentListProps = {

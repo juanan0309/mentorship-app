@@ -1,6 +1,8 @@
 import { Dispatch, SetStateAction, useState, KeyboardEvent } from 'react'
 import { TextField, Button } from '@mui/material'
 
+import classes from './SearchBar.module.css'
+
 type searchBarProps = {
   setPosts: Dispatch<any>
   setTotalCount: Dispatch<SetStateAction<number>>
@@ -10,7 +12,6 @@ const SearchBar = ({setPosts, setTotalCount}: searchBarProps) => {
   const [searchTerm, setSearchTerm] = useState('')
 
   const handleSearchTermChange = (event: KeyboardEvent<HTMLInputElement>) => {
-    console.log(event)
     if (event.key === 'Enter') { 
       handleSearch()
       return
@@ -26,7 +27,7 @@ const SearchBar = ({setPosts, setTotalCount}: searchBarProps) => {
     })
   }
   return (
-    <>
+    <div className={classes.container}>
       <TextField
         id="outlined-basic"
         label="Search Interview"
@@ -34,9 +35,10 @@ const SearchBar = ({setPosts, setTotalCount}: searchBarProps) => {
         value={searchTerm}
         onKeyPress={handleSearchTermChange}
         onChange={e => setSearchTerm(e.target.value)}
+        className={classes['search-input']}
       />    
       <Button variant="contained" color="primary" onClick={handleSearch}>Search</Button>
-    </>
+    </div>
   )
 }
 
