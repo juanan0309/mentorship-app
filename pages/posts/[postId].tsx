@@ -5,8 +5,9 @@ import { ReactNode, useState } from 'react'
 import { Button } from '@mui/material'
 import ThumbUpIcon from '@mui/icons-material/ThumbUp'
 import ThumbDownIcon from '@mui/icons-material/ThumbDown'
-import Editor from 'rich-markdown-editor'
 import { getPostById } from '../../utils/api/dbUtils'
+import dynamic from 'next/dynamic'
+const ReactQuill = dynamic(() => import('react-quill'), { ssr: false })
 
 import classes from './PostDetailPage.module.css'
 
@@ -43,8 +44,8 @@ const PostDetailPage = ({ post, initialUpvoted, userEmail }: iProps) => {
   }
 
   return (
-    <div>
-      <div className={classes.container}>
+    <div className={classes.container}>
+      <div className={classes['header-container']}>
         <h1>{post.title}</h1>
         <div className={classes['likes-button']}>
           <p>{likes.count}</p>
@@ -57,7 +58,13 @@ const PostDetailPage = ({ post, initialUpvoted, userEmail }: iProps) => {
           </Button>
         </div>
       </div>
-      <Editor defaultValue={post.content} readOnly={true}/>
+      <ReactQuill
+        readOnly={true}
+        defaultValue={post.content}
+        className={classes.content}
+        modules={{toolbar: false}}
+      />
+      
     </div>
   )
 }

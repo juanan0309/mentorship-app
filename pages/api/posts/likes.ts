@@ -1,4 +1,4 @@
-import { connectDatabase, getAllPosts } from '../../../utils/api/dbUtils'
+import { connectDatabase } from '../../../utils/api/dbUtils'
 import { NextApiRequest, NextApiResponse } from 'next'
 import { Post } from '../../../server/models/Post'
 

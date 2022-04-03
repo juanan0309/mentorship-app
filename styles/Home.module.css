@@ -1,5 +1,17 @@
 .container {
   padding: 0 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.options {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
+  width: 100%;
+  margin-bottom: 2rem;
 }
 
 .main {
@@ -114,6 +126,11 @@
   }
   .grid {
     width: 100%;
+    flex-direction: column;
+  }
+
+  .options {
+    display: flex;
     flex-direction: column;
   }
 }

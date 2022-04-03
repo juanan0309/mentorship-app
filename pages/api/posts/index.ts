@@ -5,9 +5,9 @@ import { Post } from '../../../server/models/Post'
 async function handler(req: NextApiRequest, res: NextApiResponse) {
   const client = await connectDatabase()
   if (req.method === 'GET') {
-    const { page } = req.query
+    const { page, sortBy } = req.query
     const skip = (+page - 1) * 10
-    const response = await getAllPosts(10, skip)
+    const response = await getAllPosts(10, skip, sortBy as string)
 
     res
       .status(200)

@@ -1,14 +1,23 @@
 .container {
   display: flex;
+  flex-direction: column;
+  width: 90%;
+  margin: 0 auto;
+}
+
+.header-container {
+  display: flex;
+  flex-direction: column;
   justify-content: space-around;
   align-items: center;
   position: relative;
+  margin-bottom: 20px;
 }
 
 .container h1 {
   width: 90%;
   text-align: center;
-  margin: 5px auto;
+  margin: 0 auto;
 }
 
 .likes-button {
@@ -18,18 +27,27 @@
   justify-content: space-between;
   align-items: center;
   right: 1rem;
+  height: 4rem
 }
 
 .likes-button p {
-    font-size: 1.4rem;
-    margin-right: 5px;
+  font-size: 1.4rem;
+  margin-right: 5px;
+}
+
+.content {
+  height: auto;
 }
 
 @media screen and (max-width: 768px) {
-    .container {
-        flex-direction: column;
-    }
+  .header-container {
+    flex-direction: column;
+  }
   .likes-button {
     position: relative;
+  }
+
+  .content {
+    height: auto;
   }
 }
