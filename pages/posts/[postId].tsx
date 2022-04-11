@@ -7,6 +7,7 @@ import ThumbUpIcon from '@mui/icons-material/ThumbUp'
 import ThumbDownIcon from '@mui/icons-material/ThumbDown'
 import { getPostById } from '../../utils/api/dbUtils'
 import dynamic from 'next/dynamic'
+import { isString } from '../../utils/utilFunctions' 
 const ReactQuill = dynamic(() => import('react-quill'), { ssr: false })
 
 import classes from './PostDetailPage.module.css'
@@ -69,7 +70,7 @@ const PostDetailPage = ({ post, initialUpvoted, userEmail }: iProps) => {
   )
 }
 
-export const getServerSideProps: GetServerSideProps = async (context: any) => {
+export const getServerSideProps: GetServerSideProps = async (context) => {
   const session = await getSession(context)
   if (!session) {
     context.res.writeHead(302, { Location: '/login' })
@@ -77,8 +78,20 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
     return { props: { posts: [], totalCount: 0 } }
   }
 
-  const postId = context.params.postId
+  const postId = context.params?.postId
 
+  if (!postId) {
+    context.res.writeHead(404, { Location: '/login' })
+    return { props: { posts: [], totalCount: 0 } }
+  }
+
+
+
+  if (!isString(postId)) {
+    context.res.writeHead(404, { Location: '/login' })
+    return { props: { posts: [], totalCount: 0 } }
+  }
+  
   let post = await getPostById(postId)
   post = JSON.parse(JSON.stringify(post))
   const initialUpvoted = post.likes.users.indexOf(session.user?.email) !== -1

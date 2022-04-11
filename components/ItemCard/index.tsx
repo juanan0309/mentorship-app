@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { Card, CardActionArea, CardContent } from '@mui/material'
+import { Card, CardActionArea, CardContent, Grid } from '@mui/material'
 import ThumbUpIcon from '@mui/icons-material/ThumbUp'
 import classes from './ItemCard.module.css'
 
@@ -15,22 +15,25 @@ type ItemCardProps = {
 const ItemCard = (props: ItemCardProps) => {
   const { title, _id, likes } = props
   return (
-    <Card sx={{ minWidth: 275 }} className={classes.container}>
-      <Link href={`/posts/${_id}`} passHref>
-        <CardActionArea>
-          <CardContent>
-            <h2>{title}</h2>
-            <p>{}</p>
-            <div className={classes['likes-container']}>
-              <p>{likes.count} </p>
-              <span>
-                <ThumbUpIcon />
-              </span>
-            </div>
-          </CardContent>
-        </CardActionArea>
-      </Link>
-    </Card>
+    <Grid item className={classes.container}>
+      <Card sx={{ minWidth: 275, height: '100%' }} data-testid="card-element">
+        <Link href={`/posts/${_id}`} passHref>
+          <CardActionArea>
+            <CardContent>
+              <div className={classes['card-title__container']}>
+                <h2>{title}</h2>
+              </div>
+              <div className={classes['likes-container']}>
+                <p>{likes.count} </p>
+                <span>
+                  <ThumbUpIcon />
+                </span>
+              </div>
+            </CardContent>
+          </CardActionArea>
+        </Link>
+      </Card>
+    </Grid>
   )
 }
 

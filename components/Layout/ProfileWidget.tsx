@@ -7,6 +7,7 @@ import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 import ListItemIcon from '@mui/material/ListItemIcon'
 import Logout from '@mui/icons-material/Logout'
+import dummyImage from '../../public/images/dummy-user.webp'
 
 import classes from './ProfileWidget.module.css'
 
@@ -38,8 +39,8 @@ const ProfileWidget = () => {
       <Tooltip title="menu">
         <div>
           <Image
-            src={session.user?.image as string}
-            alt={session.user?.name as string}
+            src={session.user?.image || dummyImage}
+            alt={session.user?.name || 'username'}
             width={70}
             height={70}
             onClick={handleClick}

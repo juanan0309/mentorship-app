@@ -3,9 +3,12 @@ import AddBoxIcon from '@mui/icons-material/AddBox'
 
 const ButtonList = () => {
   return (
-    <div>
+    <div className="add-button">
       <Link href="/posts/create" passHref>
-        <AddBoxIcon sx={{ fontSize: '46px' }} color="primary" />
+        <AddBoxIcon
+          sx={{ fontSize: '46px', cursor: 'pointer' }}
+          color="primary"
+        />
       </Link>
     </div>
   )

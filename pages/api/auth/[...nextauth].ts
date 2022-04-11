@@ -1,12 +1,14 @@
 import NextAuth from 'next-auth'
 import GoogleProvider from 'next-auth/providers/google'
+import { validateString } from '../../../utils/utilFunctions'
+
 
 export default NextAuth({
   // Configure one or more authentication providers
   providers: [
     GoogleProvider({
-      clientId: process.env.GOOGLE_ID as string,
-      clientSecret: process.env.GOOGLE_SECRET as string,
+      clientId: validateString(process.env.GOOGLE_ID, 'GOOGLE_ID'),
+      clientSecret: validateString(process.env.GOOGLE_SECRET, 'GOOGLE_SECRET'),
       authorization: {
         params: {
           prompt: 'consent',

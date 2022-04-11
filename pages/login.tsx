@@ -14,6 +14,7 @@ export default function Login() {
           Not signed in <br />
           <div id="my-signin2"></div>
           <button
+            className='signin-button'
             onClick={() =>
               signIn('google', {
                 callbackUrl:

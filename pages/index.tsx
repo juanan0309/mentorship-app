@@ -4,12 +4,9 @@ import { NextPage, GetServerSideProps } from 'next'
 import { useRouter } from 'next/router'
 import { getSession } from 'next-auth/react'
 import { ReactNode } from 'react'
-import ContentList from '../components/ContentList'
-import SearchBar from '../components/SearchBar'
 import { getAllPosts } from '../utils/api/dbUtils'
-import PaginationButtons from '../components/PaginationButtons'
-import SortInput from '../components/SortInput'
-import classes from '../styles/Home.module.css'
+import Home from '../components/Home'
+import { validateString } from '../utils/utilFunctions'
 
 type iProps = {
   posts: unknown
@@ -17,10 +14,10 @@ type iProps = {
   children?: ReactNode
 }
 
-const Home: NextPage<iProps> = (props: iProps) => {
+const HomePage: NextPage<iProps> = (props: iProps) => {
   const router = useRouter()
   const { posts: initialPosts } = props
-  const page = router.query.page || 1
+  const page = router?.query?.page || 1
   const [totalCount, setTotalCount] = useState(props.totalCount)
   const [posts, setPosts] = useState(initialPosts)
   const [isFetching, setIsFetching] = useState(false)
@@ -54,29 +51,19 @@ const Home: NextPage<iProps> = (props: iProps) => {
   }
 
   return (
-    <div className={classes.container}>
-      <div className={classes.options}>
-        <SearchBar setPosts={setPosts} setTotalCount={setTotalCount} />
-        <SortInput
-          handleSort={handleSortChange}
-          sortBy={sortBy}
-          setSortBy={setSortBy}
-        />
-      </div>
-      {isFetching ? (
-        <div className={classes.loading}>
-          <p>Loading...</p>
-        </div>
-      ) : (
-        <ContentList items={posts} />
-      )}
-      <PaginationButtons
-        handleNextPage={handleNextPage}
-        handlePreviousPage={handlePreviousPage}
-        nextButtonActive={nextButtonActive}
-        previousButtonActive={previousButtonActive}
-      />
-    </div>
+    <Home
+      posts={posts}
+      setPosts={setPosts}
+      setTotalCount={setTotalCount}
+      sortBy={sortBy}
+      setSortBy={setSortBy}
+      isFetching={isFetching}
+      handleSortChange={handleSortChange}
+      handleNextPage={handleNextPage}
+      handlePreviousPage={handlePreviousPage}
+      nextButtonActive={nextButtonActive}
+      previousButtonActive={previousButtonActive}
+    />
   )
 }
 
@@ -90,7 +77,11 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   const page = context.query?.page || 1
   const sort = context.query?.sort || 'createdAt'
   const skip = (+page - 1) * 10
-  let { posts, totalCount } = await getAllPosts(10, skip, sort as string)
+  let { posts, totalCount } = await getAllPosts(
+    10,
+    skip,
+    validateString(sort, 'sort'),
+  )
   posts = JSON.parse(JSON.stringify(posts))
 
   return {
@@ -101,4 +92,4 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   }
 }
 
-export default Home
+export default HomePage

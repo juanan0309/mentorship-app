@@ -24,7 +24,7 @@ const NavBar = () => {
         <Grid
           item
           xs={3}
-          md={3}
+          md={2}
           className={classes.container__item}
           style={navBarItemRemovePadding}
         >
@@ -47,7 +47,7 @@ const NavBar = () => {
         <Grid
           item
           xs={3}
-          md={1}
+          md={2}
           className={classes.container__item}
           style={navBarItemRemovePadding}
         >

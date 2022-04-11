@@ -9,10 +9,10 @@ type iSort = {
 
 const SortInput = ({ handleSort, sortBy, setSortBy } : iSort) => {
   const handleSortByChange = (
-    event: React.ChangeEvent<{ value: unknown }>,
+    event: React.ChangeEvent<{ value: string }>,
   ) => {
-    setSortBy(event.target.value as string)
-    handleSort(event.target.value as string)
+    setSortBy(event.target.value)
+    handleSort(event.target.value)
   }
 
   const sortOptions = [

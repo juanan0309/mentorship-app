@@ -1,8 +1,9 @@
 import { connectDatabase, getFilteredPosts } from '../../../utils/api/dbUtils'
 import { NextApiRequest, NextApiResponse } from 'next'
+import { validateString } from '../../../utils/utilFunctions'
 
 async function handler(req: NextApiRequest, res: NextApiResponse) {
-  const search = req.query.q as string
+  const search = validateString(req.query.q, 'query')
   const client = await connectDatabase()
   const response = await getFilteredPosts(search)
 

@@ -1,6 +1,5 @@
 .container {
     display: flex;
-    margin-bottom: 1rem;;
 }
 
 .search-input {
@@ -11,5 +10,6 @@
     .container {
         width: 100%;
         justify-content: center;
+        margin-bottom: 1rem;
     }
 }
