@@ -1,7 +1,8 @@
-import { connectDatabase, getAllPosts } from '../../../utils/api/dbUtils'
+import { connectDatabase, getAllPosts, updatePost } from '../../../utils/api/dbUtils'
 import { NextApiRequest, NextApiResponse } from 'next'
 import { Post } from '../../../server/models/Post'
 import { validateString } from '../../../utils/utilFunctions'
+import { update } from "cypress/types/lodash"
 
 async function handler(req: NextApiRequest, res: NextApiResponse) {
   const client = await connectDatabase()
@@ -24,6 +25,13 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
     const post = await Post.create(values)
 
     res.status(201).json({ post })
+  }
+
+  if (req.method === 'PUT') {
+    const {postId:id, ...values} = req.body
+    const post = await updatePost(id, values)
+
+    res.status(200).json({ post })
   }
   client.disconnect()
 }

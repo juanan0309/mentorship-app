@@ -1,13 +1,13 @@
 import { GetServerSideProps } from 'next'
-import { getSession } from 'next-auth/react'
 import { useRouter } from 'next/router'
+import { getSession } from 'next-auth/react'
 import { ReactNode, useState } from 'react'
 import { Button } from '@mui/material'
 import ThumbUpIcon from '@mui/icons-material/ThumbUp'
 import ThumbDownIcon from '@mui/icons-material/ThumbDown'
-import { getPostById } from '../../utils/api/dbUtils'
+import { getPostById } from '../../../utils/api/dbUtils'
 import dynamic from 'next/dynamic'
-import { isString } from '../../utils/utilFunctions' 
+import { isString } from '../../../utils/utilFunctions'
 const ReactQuill = dynamic(() => import('react-quill'), { ssr: false })
 
 import classes from './PostDetailPage.module.css'
@@ -20,9 +20,9 @@ type iProps = {
 }
 
 const PostDetailPage = ({ post, initialUpvoted, userEmail }: iProps) => {
+  const router = useRouter()
   const [likes, setLikes] = useState(post.likes)
   const [upvoted, setUpvoted] = useState(initialUpvoted)
-  const router = useRouter()
   const { postId } = router.query
 
   const handleLikesAction = () => {
@@ -51,21 +51,31 @@ const PostDetailPage = ({ post, initialUpvoted, userEmail }: iProps) => {
         <div className={classes['likes-button']}>
           <p>{likes.count}</p>
           <Button
-            variant="contained"
-            color="primary"
+            variant='contained'
+            color='primary'
             onClick={handleLikesAction}
+            data-testid='likes-button'
           >
             {upvoted ? <ThumbDownIcon /> : <ThumbUpIcon />}
           </Button>
+          {post.ownerId === userEmail && (
+            <Button
+              variant='contained'
+              color='primary'
+              data-testid='edit-button'
+              onClick={() => router.push(`/posts/${postId}/edit`)}
+            >
+              Edit
+            </Button>
+          )}
         </div>
       </div>
       <ReactQuill
         readOnly={true}
         defaultValue={post.content}
         className={classes.content}
-        modules={{toolbar: false}}
+        modules={{ toolbar: false }}
       />
-      
     </div>
   )
 }
@@ -81,17 +91,15 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   const postId = context.params?.postId
 
   if (!postId) {
-    context.res.writeHead(404, { Location: '/login' })
+    context.res.writeHead(404, { Location: '/' })
     return { props: { posts: [], totalCount: 0 } }
   }
-
-
 
   if (!isString(postId)) {
-    context.res.writeHead(404, { Location: '/login' })
+    context.res.writeHead(404, { Location: '/' })
     return { props: { posts: [], totalCount: 0 } }
   }
-  
+
   let post = await getPostById(postId)
   post = JSON.parse(JSON.stringify(post))
   const initialUpvoted = post.likes.users.indexOf(session.user?.email) !== -1

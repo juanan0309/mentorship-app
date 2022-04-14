@@ -8,12 +8,11 @@ context('720p resolution', () => {
      */
     cy.viewport(1280, 720)
   })
-  describe('User happy path', () => {
-    it('Succesfully creates a Post and Likes it', () => {
-      cy.login();
-      cy.visit('/')
 
-      cy.contains('Search Interview').should('exist')
+  describe('User owner can edit his own post', () => {
+    it('Successfully edit a post', () => {
+      cy.login()
+      cy.visit('/')
 
       cy.get('.add-button').click()
 
@@ -28,18 +27,17 @@ context('720p resolution', () => {
 
       cy.wait(2000)
 
-      cy.contains('Test Post From Cypress').should('exist')
-
       cy.contains('Test Post From Cypress').click()
 
-      cy.wait(5000)
+      cy.wait(2000)
 
-      cy.get('button[data-testid="likes-button"]').click()
+      cy.get('button[data-testid="edit-button"]').should('exist')
 
-      cy.wait(500)
+      cy.get('button[data-testid="edit-button"]').click()
 
-      cy.contains('1').should('exist')
+      cy.url().should('include', '/edit')
 
+      cy.contains('.MuiButton-root', /Update/i).should('exist')
     })
   })
 })

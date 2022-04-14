@@ -49,3 +49,23 @@ export async function getFilteredPosts( search: string, limit: number = 10, skip
   client.disconnect()
   return {posts, totalCount}
 }
+
+export async function getAllPostsByOwnerId( limit: number = 10, skip: number = 0, ownerId: string ) {
+  const client = await connectDatabase()
+
+  const totalCount = await Post.count()
+  
+  const posts = limit !== 0 ? 
+    await Post.find({ownerId}).limit(limit).skip(skip).lean() :
+    await Post.find({ownerId}).lean()
+  client.disconnect()
+  return {posts, totalCount}
+}
+
+export async function updatePost(id: string, values: any) {
+  const client = await connectDatabase()
+
+  const post = await Post.findByIdAndUpdate(id, values, { new: true })
+  client.disconnect()
+  return post
+}

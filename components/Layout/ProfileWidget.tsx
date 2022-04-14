@@ -2,10 +2,12 @@ import React from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { useSession, signOut } from 'next-auth/react'
+import { useRouter } from 'next/router'
 import Tooltip from '@mui/material/Tooltip'
 import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 import ListItemIcon from '@mui/material/ListItemIcon'
+import NoteIcon from '@mui/icons-material/Note';
 import Logout from '@mui/icons-material/Logout'
 import dummyImage from '../../public/images/dummy-user.webp'
 
@@ -13,6 +15,7 @@ import classes from './ProfileWidget.module.css'
 
 const ProfileWidget = () => {
   const { data: session } = useSession()
+  const router = useRouter()
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
   const open = Boolean(anchorEl)
 
@@ -59,6 +62,12 @@ const ProfileWidget = () => {
             <Logout fontSize="small" />
           </ListItemIcon>
           Logout
+        </MenuItem>
+        <MenuItem onClick={() => router.push('/posts/my-posts')}>
+          <ListItemIcon>
+            <NoteIcon fontSize="small" />
+          </ListItemIcon>
+          My Posts
         </MenuItem>
       </Menu>
     </div>
