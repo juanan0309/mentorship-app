@@ -58,16 +58,6 @@ const PostDetailPage = ({ post, initialUpvoted, userEmail }: iProps) => {
           >
             {upvoted ? <ThumbDownIcon /> : <ThumbUpIcon />}
           </Button>
-          {post.ownerId === userEmail && (
-            <Button
-              variant='contained'
-              color='primary'
-              data-testid='edit-button'
-              onClick={() => router.push(`/posts/${postId}/edit`)}
-            >
-              Edit
-            </Button>
-          )}
         </div>
       </div>
       <ReactQuill
@@ -76,6 +66,17 @@ const PostDetailPage = ({ post, initialUpvoted, userEmail }: iProps) => {
         className={classes.content}
         modules={{ toolbar: false }}
       />
+      {post.ownerId === userEmail && (
+            <Button
+              variant='contained'
+              color='primary'
+              data-testid='edit-button'
+              onClick={() => router.push(`/posts/${postId}/edit`)}
+              style={{ marginTop: '1rem', width: '100px', alignSelf: 'center' }}
+            >
+              Edit
+            </Button>
+          )}
     </div>
   )
 }

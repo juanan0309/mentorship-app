@@ -1,4 +1,7 @@
 import { signIn, signOut, useSession } from 'next-auth/react'
+import { Button } from '@mui/material'
+
+import classes from './LoginPage.module.css'
 
 export default function Login() {
   const { data: session, status } = useSession()
@@ -8,12 +11,14 @@ export default function Login() {
   }
 
   return (
-    <div>
+    <div className={classes.container}>
+      <h1>Welcome to Wizeviews!</h1>
       {!session && (
         <>
-          Not signed in <br />
-          <div id="my-signin2"></div>
-          <button
+          <div id='my-signin2'></div>
+          <Button
+            variant='contained'
+            color='primary'
             className='signin-button'
             onClick={() =>
               signIn('google', {
@@ -23,13 +28,15 @@ export default function Login() {
             }
           >
             Sign in
-          </button>
+          </Button>
         </>
       )}
       {session && (
         <>
-          Signed in as {session.user?.name} <br />
-          <button onClick={() => signOut()}>Sign out</button>
+          <p>Signed in as {session.user?.name}</p>
+          <Button variant='contained' color='primary' onClick={() => signOut()}>
+            Sign out
+          </Button>
         </>
       )}
     </div>

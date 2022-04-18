@@ -7,7 +7,7 @@ import Tooltip from '@mui/material/Tooltip'
 import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 import ListItemIcon from '@mui/material/ListItemIcon'
-import NoteIcon from '@mui/icons-material/Note';
+import NoteIcon from '@mui/icons-material/Note'
 import Logout from '@mui/icons-material/Logout'
 import dummyImage from '../../public/images/dummy-user.webp'
 
@@ -31,7 +31,13 @@ const ProfileWidget = () => {
     return (
       <div>
         <Link href={'/login'} passHref>
-          Sign In
+          <Image
+            src={dummyImage}
+            alt={'username'}
+            width={70}
+            height={70}
+            onClick={handleClick}
+          />
         </Link>
       </div>
     )
@@ -39,7 +45,7 @@ const ProfileWidget = () => {
 
   return (
     <div className={classes.widgetContainer}>
-      <Tooltip title="menu">
+      <Tooltip title='menu'>
         <div>
           <Image
             src={session.user?.image || dummyImage}
@@ -52,20 +58,20 @@ const ProfileWidget = () => {
       </Tooltip>
       <Menu
         anchorEl={anchorEl}
-        id="account-menu"
+        id='account-menu'
         open={open}
         onClose={handleClose}
         onClick={handleClose}
       >
         <MenuItem onClick={() => signOut()}>
           <ListItemIcon>
-            <Logout fontSize="small" />
+            <Logout fontSize='small' />
           </ListItemIcon>
           Logout
         </MenuItem>
         <MenuItem onClick={() => router.push('/posts/my-posts')}>
           <ListItemIcon>
-            <NoteIcon fontSize="small" />
+            <NoteIcon fontSize='small' />
           </ListItemIcon>
           My Posts
         </MenuItem>

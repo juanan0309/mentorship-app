@@ -53,7 +53,7 @@ export async function getFilteredPosts( search: string, limit: number = 10, skip
 export async function getAllPostsByOwnerId( limit: number = 10, skip: number = 0, ownerId: string ) {
   const client = await connectDatabase()
 
-  const totalCount = await Post.count()
+  const totalCount = await Post.count({ownerId})
   
   const posts = limit !== 0 ? 
     await Post.find({ownerId}).limit(limit).skip(skip).lean() :
