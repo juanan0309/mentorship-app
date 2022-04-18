@@ -2,6 +2,7 @@ import { GetServerSideProps } from 'next'
 import { useRouter } from 'next/router'
 import { getSession } from 'next-auth/react'
 import { ReactNode, useState } from 'react'
+import Swal from 'sweetalert2'
 import { Button } from '@mui/material'
 import ThumbUpIcon from '@mui/icons-material/ThumbUp'
 import ThumbDownIcon from '@mui/icons-material/ThumbDown'
@@ -44,6 +45,46 @@ const PostDetailPage = ({ post, initialUpvoted, userEmail }: iProps) => {
       })
   }
 
+  const handleDeleteAction = () => {
+    Swal.fire({
+      title: 'Are you sure?',
+      text: "You won't be able to revert this!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Confirm',
+      cancelButtonText: 'Cancel',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        fetch(`/api/posts`, {
+          method: 'DELETE',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            postId,
+            userEmail,
+          }),
+        })
+          .then(() => {
+            Swal.fire({
+              title: 'Done!',
+              text: 'Post deleted successfully',
+              icon: 'success',
+              confirmButtonText: 'Go to Home',
+            }).then(() => router.push(`/`))
+          })
+          .catch(() => {
+            Swal.fire({
+              title: 'Oops!',
+              text: 'There was an error with your post, please try again',
+              icon: 'error',
+              confirmButtonText: 'Return',
+            })
+          })
+      }
+    })
+  }
+
   return (
     <div className={classes.container}>
       <div className={classes['header-container']}>
@@ -67,16 +108,27 @@ const PostDetailPage = ({ post, initialUpvoted, userEmail }: iProps) => {
         modules={{ toolbar: false }}
       />
       {post.ownerId === userEmail && (
-            <Button
-              variant='contained'
-              color='primary'
-              data-testid='edit-button'
-              onClick={() => router.push(`/posts/${postId}/edit`)}
-              style={{ marginTop: '1rem', width: '100px', alignSelf: 'center' }}
-            >
-              Edit
-            </Button>
-          )}
+        <div className={classes['action-buttons']}>
+          <Button
+            variant='contained'
+            color='primary'
+            data-testid='edit-button'
+            onClick={() => router.push(`/posts/${postId}/edit`)}
+            style={{ marginTop: '1rem', width: '100px', alignSelf: 'center' }}
+          >
+            Edit
+          </Button>
+          <Button
+            variant='contained'
+            color='primary'
+            data-testid='delete-button'
+            onClick={handleDeleteAction}
+            style={{ marginTop: '1rem', width: '100px', alignSelf: 'center' }}
+          >
+            Delete
+          </Button>
+        </div>
+      )}
     </div>
   )
 }

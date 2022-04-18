@@ -1,8 +1,11 @@
-import { connectDatabase, getAllPosts, updatePost } from '../../../utils/api/dbUtils'
+import {
+  connectDatabase,
+  getAllPosts,
+  updatePost,
+} from '../../../utils/api/dbUtils'
 import { NextApiRequest, NextApiResponse } from 'next'
 import { Post } from '../../../server/models/Post'
 import { validateString } from '../../../utils/utilFunctions'
-import { update } from "cypress/types/lodash"
 
 async function handler(req: NextApiRequest, res: NextApiResponse) {
   const client = await connectDatabase()
@@ -28,11 +31,19 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
   }
 
   if (req.method === 'PUT') {
-    const {postId:id, ...values} = req.body
+    const { postId: id, ...values } = req.body
     const post = await updatePost(id, values)
 
     res.status(200).json({ post })
   }
+
+  if (req.method === 'DELETE') {
+    const { postId: id, userEmail } = req.body
+    await Post.deleteOne({ _id: id, ownerId: userEmail })
+
+    res.status(204).end()
+  }
+
   client.disconnect()
 }
 

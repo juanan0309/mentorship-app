@@ -46,9 +46,22 @@
   }
   .likes-button {
     position: relative;
+    right: 0;
   }
 
   .content {
     height: auto;
   }
+}
+
+.action-buttons {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: 5px;
+}
+
+.action-buttons button {
+  margin: 5px;
 }

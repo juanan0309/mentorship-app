@@ -38,6 +38,28 @@ context('720p resolution', () => {
       cy.url().should('include', '/edit')
 
       cy.contains('.MuiButton-root', /Update/i).should('exist')
+
+      cy.contains('.MuiButton-root', /Update/i).click()
+
+      cy.wait(2000)
+
+      cy.get('.swal2-confirm').click()
+
+      cy.wait(2000)
+
+      cy.contains('Test Post From Cypress').click()
+
+      cy.wait(2000)
+
+      cy.get('button[data-testid="delete-button"]').click()
+
+      cy.wait(3000)
+
+      cy.get('.swal2-confirm').click()     
+      
+      cy.wait(2000)
+
+      cy.get('.swal2-confirm').click()
     })
   })
 })

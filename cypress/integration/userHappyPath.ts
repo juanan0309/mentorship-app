@@ -40,6 +40,18 @@ context('720p resolution', () => {
 
       cy.contains('1').should('exist')
 
+      cy.get('button[data-testid="delete-button"]').click()
+
+      cy.wait(3000)
+
+      cy.get('.swal2-confirm').click()     
+      
+      cy.wait(2000)
+
+      cy.get('.swal2-confirm').click()
+
+      cy.contains('Test Post From Cypress').should('not.exist')
+
     })
   })
 })
