@@ -13,52 +13,23 @@ context('720p resolution', () => {
     it('Successfully edit a post', () => {
       cy.login()
       cy.visit('/')
-
       cy.get('.add-button').click()
-
       cy.get('input[name="title"]').type('Test Post From Cypress')
       cy.get('.ql-editor p').type('Text from Cypress')
-
       cy.contains('Submit').click()
-
-      cy.wait(2000)
-
       cy.get('.swal2-confirm').click()
-
-      cy.wait(2000)
-
       cy.contains('Test Post From Cypress').click()
-
-      cy.wait(2000)
-
       cy.get('button[data-testid="edit-button"]').should('exist')
-
       cy.get('button[data-testid="edit-button"]').click()
-
+      cy.wait(2000)
       cy.url().should('include', '/edit')
-
       cy.contains('.MuiButton-root', /Update/i).should('exist')
-
       cy.contains('.MuiButton-root', /Update/i).click()
-
-      cy.wait(2000)
-
       cy.get('.swal2-confirm').click()
-
-      cy.wait(2000)
-
       cy.contains('Test Post From Cypress').click()
-
-      cy.wait(2000)
-
       cy.get('button[data-testid="delete-button"]').click()
-
-      cy.wait(3000)
-
-      cy.get('.swal2-confirm').click()     
-      
+      cy.get('.swal2-confirm').click()   
       cy.wait(2000)
-
       cy.get('.swal2-confirm').click()
     })
   })

@@ -4,10 +4,16 @@ import {
   updatePost,
 } from '../../../utils/api/dbUtils'
 import { NextApiRequest, NextApiResponse } from 'next'
+import { getSession } from "next-auth/react"
 import { Post } from '../../../server/models/Post'
 import { validateString } from '../../../utils/utilFunctions'
 
 async function handler(req: NextApiRequest, res: NextApiResponse) {
+  const session = await getSession({ req })
+  if (!session) {
+    res.status(401).json({ message: 'Please login first' })
+    return
+  }
   const client = await connectDatabase()
   if (req.method === 'GET') {
     const { page, sortBy } = req.query

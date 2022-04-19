@@ -1,8 +1,14 @@
 import { connectDatabase } from '../../../utils/api/dbUtils'
 import { NextApiRequest, NextApiResponse } from 'next'
+import { getSession } from "next-auth/react"
 import { Post } from '../../../server/models/Post'
 
 async function handler(req: NextApiRequest, res: NextApiResponse) {
+  const session = await getSession({ req })
+  if (!session) {
+    res.status(401).json({ message: 'Please login first' })
+    return
+  }
   const { postId, upvoted, userEmail } = req.body
   const client = await connectDatabase()
 
