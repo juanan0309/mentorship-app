@@ -136,7 +136,7 @@ const PostDetailPage = ({ post, initialUpvoted, userEmail }: iProps) => {
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const session = await getSession(context)
   if (!session) {
-    context.res.writeHead(302, { Location: '/login' })
+    context.res.writeHead(302, { Location: `/login?redirect=${context.req.url}` })
     context.res.end()
     return { props: { posts: [], totalCount: 0 } }
   }

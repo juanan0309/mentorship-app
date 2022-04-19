@@ -19,7 +19,7 @@ const EditPage = ({ post }: iProps) => {
 export const getServerSideProps: GetServerSideProps = async (context: any) => {
   const session = await getSession(context)
   if (!session) {
-    context.res.writeHead(302, { Location: '/login' })
+    context.res.writeHead(302, { Location: `/login?redirect=${context.req.url}` })
     context.res.end()
     return { props: { posts: [], totalCount: 0 } }
   }

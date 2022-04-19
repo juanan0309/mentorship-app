@@ -1,9 +1,16 @@
 import { signIn, signOut, useSession } from 'next-auth/react'
+import { useRouter } from 'next/router'
 import { Button } from '@mui/material'
+import { isString } from "../utils/utilFunctions"
 
 import classes from './LoginPage.module.css'
 
 export default function Login() {
+  const router = useRouter()
+  if (!router.query.redirect || !isString(router.query.redirect)) {
+    router.query.redirect = '/'
+  }
+  let callbackUrl = router.query.redirect
   const { data: session, status } = useSession()
 
   if (status === 'loading') {
@@ -23,7 +30,7 @@ export default function Login() {
             onClick={() =>
               signIn('google', {
                 callbackUrl:
-                  process.env.NEXT_PUBLIC_VERCEL_URL || 'http://localhost:3000',
+                  callbackUrl || 'http://localhost:3000',
               })
             }
           >
