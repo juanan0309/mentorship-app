@@ -70,7 +70,7 @@ const PostDetailPage = ({ post, initialUpvoted, userEmail }: iProps) => {
               title: 'Done!',
               text: 'Post deleted successfully',
               icon: 'success',
-              confirmButtonText: 'Go to Home',
+              confirmButtonText: 'Return',
             }).then(() => router.push(`/`))
           })
           .catch(() => {

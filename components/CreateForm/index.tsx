@@ -63,11 +63,16 @@ const CreateForm = ({ router, session, edit = false, post }: iProps) => {
             ownerId: session?.user?.email as string,
           }
           if (edit) {
-            ;(data.postId = post?._id), (data.likes = post?.likes)
+            data.postId = post?._id
+            data.likes = post?.likes
           }
           const fetchOptions = edit
-            ? { method: 'PUT', message: 'Post edited' }
-            : { method: 'POST', message: 'Post created' }
+            ? {
+                method: 'PUT',
+                message: 'Post edited',
+                redirect: `/posts/${data.postId}`,
+              }
+            : { method: 'POST', message: 'Post created', redirect: '/' }
 
           fetch('/api/posts', {
             method: fetchOptions.method,
@@ -79,12 +84,21 @@ const CreateForm = ({ router, session, edit = false, post }: iProps) => {
             .then((res) => res.json())
             .then((res) => {
               setSubmitting(false)
-              Swal.fire({
-                title: 'Thank you!',
-                text: fetchOptions.message,
-                icon: 'success',
-                confirmButtonText: 'Go to Home',
-              }).then(() => router.push(`/`))
+              if (res.error) {
+                Swal.fire({
+                  title: 'Error',
+                  text: res.error,
+                  icon: 'error',
+                  confirmButtonText: 'Return',
+                }).then(() => router.push(fetchOptions.redirect))
+              } else {
+                Swal.fire({
+                  title: 'Thank you!',
+                  text: fetchOptions.message,
+                  icon: 'success',
+                  confirmButtonText: 'Go Back',
+                }).then(() => router.push(fetchOptions.redirect))
+              }
             })
             .catch((err) => {
               console.log('Error while creating a new post:', err.message)

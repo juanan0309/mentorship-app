@@ -2,9 +2,10 @@ import {
   connectDatabase,
   getAllPosts,
   updatePost,
+  getPostById,
 } from '../../../utils/api/dbUtils'
 import { NextApiRequest, NextApiResponse } from 'next'
-import { getSession } from "next-auth/react"
+import { getSession } from 'next-auth/react'
 import { Post } from '../../../server/models/Post'
 import { validateString } from '../../../utils/utilFunctions'
 
@@ -38,6 +39,13 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 
   if (req.method === 'PUT') {
     const { postId: id, ...values } = req.body
+    const validatePost = await getPostById(id)
+    if (session.user?.email !== validatePost.ownerId) {
+      res
+        .status(403)
+        .json({ error: 'You are not authorized to update this post' })
+      return
+    }
     const post = await updatePost(id, values)
 
     res.status(200).json({ post })
@@ -45,6 +53,13 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 
   if (req.method === 'DELETE') {
     const { postId: id, userEmail } = req.body
+    const validatePost = await getPostById(id)
+    if (session.user?.email !== validatePost.ownerId) {
+      res
+        .status(403)
+        .json({ error: 'You are not authorized to update this post' })
+      return
+    }
     await Post.deleteOne({ _id: id, ownerId: userEmail })
 
     res.status(204).end()
