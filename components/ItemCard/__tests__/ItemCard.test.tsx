@@ -6,6 +6,7 @@ const post = {
   _id: '1',
   title: 'Lotstring',
   likes: { count: 2, users: [] },
+  ownerId: 'test@test.com'
 }
 
 describe('Item Card', () => {

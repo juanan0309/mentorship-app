@@ -1,6 +1,13 @@
 import mongoose from 'mongoose'
 import { Post } from '../../server/models/Post'
 
+type createPostValues = {
+  ownerId: string
+  title: string
+  client: string
+  content: string
+}
+
 export async function connectDatabase() {
   const client = await mongoose.connect(
     process.env.NEXT_PUBLIC_MONGODB_URI || 'mongodb://localhost:27017/',
@@ -36,6 +43,7 @@ export async function getFilteredPosts( search: string, limit: number = 10, skip
     $or: [
       { title: { $regex: search, $options: 'i' } },
       { content: { $regex: search, $options: 'i' } },
+      { client: { $regex: search, $options: 'i' } },
     ],
   }).limit(limit).skip(skip).lean()
 
@@ -66,6 +74,22 @@ export async function updatePost(id: string, values: any) {
   const client = await connectDatabase()
 
   const post = await Post.findByIdAndUpdate(id, values, { new: true })
+  client.disconnect()
+  return post
+}
+
+export async function deletePost(id: string, ownerId: string) {
+  const client = await connectDatabase()
+
+  await Post.deleteOne({ _id: id, ownerId })
+  client.disconnect()
+  return
+}
+
+export async function createPost(values: createPostValues) {
+  const client = await connectDatabase()
+
+  const post = await Post.create(values)
   client.disconnect()
   return post
 }

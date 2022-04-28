@@ -1,13 +1,20 @@
 import {
-  connectDatabase,
   getAllPosts,
   updatePost,
   getPostById,
+  deletePost,
+  createPost
 } from '../../../utils/api/dbUtils'
 import { NextApiRequest, NextApiResponse } from 'next'
 import { getSession } from 'next-auth/react'
-import { Post } from '../../../server/models/Post'
 import { validateString } from '../../../utils/utilFunctions'
+
+type createPostValues = {
+  ownerId: string
+  title: string
+  client: string
+  content: string
+}
 
 async function handler(req: NextApiRequest, res: NextApiResponse) {
   const session = await getSession({ req })
@@ -15,7 +22,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
     res.status(401).json({ message: 'Please login first' })
     return
   }
-  const client = await connectDatabase()
+
   if (req.method === 'GET') {
     const { page, sortBy } = req.query
     const skip = (+page - 1) * 10
@@ -31,8 +38,8 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
   }
 
   if (req.method === 'POST') {
-    const values = req.body
-    const post = await Post.create(values)
+    const values: createPostValues = req.body
+    const post = await createPost(values)
 
     res.status(201).json({ post })
   }
@@ -52,20 +59,22 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
   }
 
   if (req.method === 'DELETE') {
-    const { postId: id, userEmail } = req.body
-    const validatePost = await getPostById(id)
-    if (session.user?.email !== validatePost.ownerId) {
-      res
+    try {
+      const { postId: id, userEmail } = req.body
+      const validatePost = await getPostById(id)
+      if (session.user?.email !== validatePost.ownerId) {
+        res
         .status(403)
         .json({ error: 'You are not authorized to update this post' })
-      return
+        return
+      }
+      await deletePost(id, userEmail)
+      res.status(204).end()
+    } catch (error) {
+      console.log(error)
+      res.status(500).json({ error })
     }
-    await Post.deleteOne({ _id: id, ownerId: userEmail })
-
-    res.status(204).end()
   }
-
-  client.disconnect()
 }
 
 export default handler

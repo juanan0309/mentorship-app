@@ -15,6 +15,7 @@ context('720p resolution', () => {
       cy.visit('/')
       cy.get('.add-button').click()
       cy.get('input[name="title"]').type('Test Post From Cypress')
+      cy.get('input[name="client"]').type('Test Client')
       cy.get('.ql-editor p').type('Text from Cypress')
       cy.contains('Submit').click()
       cy.get('.swal2-confirm').click()

@@ -65,7 +65,16 @@ const PostDetailPage = ({ post, initialUpvoted, userEmail }: iProps) => {
             userEmail,
           }),
         })
-          .then(() => {
+          .then((res) => {
+            console.log(res)
+            if (res.status === 500) {
+              Swal.fire({
+                title: 'Error',
+                text: 'Something went wrong, please try again later',
+                icon: 'error',
+              })
+              return
+            }
             Swal.fire({
               title: 'Done!',
               text: 'Post deleted successfully',
@@ -89,6 +98,10 @@ const PostDetailPage = ({ post, initialUpvoted, userEmail }: iProps) => {
     <div className={classes.container}>
       <div className={classes['header-container']}>
         <h1>{post.title}</h1>
+        <div className={classes['text-container']}>
+          <p>By: {post.ownerId}</p>
+          <p>Client: {post.client}</p>
+        </div>
         <div className={classes['likes-button']}>
           <p>{likes.count}</p>
           <Button

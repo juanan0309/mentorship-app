@@ -24,6 +24,7 @@ type dataProps = {
     users: string[]
   }
   postId?: string
+  client?: string 
 }
 
 const CreateForm = ({ router, session, edit = false, post }: iProps) => {
@@ -32,15 +33,20 @@ const CreateForm = ({ router, session, edit = false, post }: iProps) => {
       <Formik
         initialValues={{
           title: edit ? post?.title : '',
+          client: edit ? post?.client : '',
           content: edit ? post?.content : '',
         }}
         validate={(values) => {
           const errors = {} as {
             title: string | undefined
+            client: string | undefined
             content: string | undefined
           }
           if (!values.title) {
             errors.title = 'Title is required'
+          }
+          if (!values.client) {
+            errors.client = 'Client is required'
           }
           if (!values.content || values.content === '<p><br></p>') {
             errors.content = 'Content is required'
@@ -59,6 +65,7 @@ const CreateForm = ({ router, session, edit = false, post }: iProps) => {
           }
           const data: dataProps = {
             title: values.title,
+            client: values.client,
             content: values.content,
             ownerId: session?.user?.email as string,
           }
@@ -121,6 +128,13 @@ const CreateForm = ({ router, session, edit = false, post }: iProps) => {
               className={classes.error}
             />
             <Field type='text' name='title' className={classes.field} />
+            <p>Client</p>
+            <ErrorMessage
+              name='client'
+              component='div'
+              className={classes.error}
+            />
+            <Field type='text' name='client' className={classes.field} />
             <p>Content</p>
             <ErrorMessage
               name='content'

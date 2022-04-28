@@ -10,6 +10,10 @@ const postSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    client: {
+      type: String,
+      required: true,
+    },
     likes: {
       count: { type: Number, default: 0 },
       users: { type: [String], default: [] },
