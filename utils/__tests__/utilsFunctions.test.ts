@@ -1,5 +1,7 @@
 import { validateString, isString } from "../utilFunctions"
 
+jest.mock("../api/dbUtils", () => () => false);
+
 describe('Check isString Functionality', () => {
   it('check string value', async () => {
     

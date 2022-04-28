@@ -1,3 +1,5 @@
+import { getPostById } from "./api/dbUtils"
+
 export function validateString(x: any, name: string): string {
   if (typeof(x) === 'string') {
     return x
@@ -8,4 +10,9 @@ export function validateString(x: any, name: string): string {
 
 export function isString(x: any): x is string {
   return typeof x === 'string'
+}
+
+export async function validatePostOwner(postId: string, userEmail: string) {
+  const post = await getPostById(postId)
+  return userEmail === post.ownerId
 }

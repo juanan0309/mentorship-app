@@ -7,7 +7,7 @@ import {
 } from '../../../utils/api/dbUtils'
 import { NextApiRequest, NextApiResponse } from 'next'
 import { getSession } from 'next-auth/react'
-import { validateString } from '../../../utils/utilFunctions'
+import { validateString, validatePostOwner } from '../../../utils/utilFunctions'
 
 type createPostValues = {
   ownerId: string
@@ -18,7 +18,7 @@ type createPostValues = {
 
 async function handler(req: NextApiRequest, res: NextApiResponse) {
   const session = await getSession({ req })
-  if (!session) {
+  if (!session || !session.user || !session.user.email) {
     res.status(401).json({ message: 'Please login first' })
     return
   }
@@ -46,8 +46,8 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 
   if (req.method === 'PUT') {
     const { postId: id, ...values } = req.body
-    const validatePost = await getPostById(id)
-    if (session.user?.email !== validatePost.ownerId) {
+    const validatePost = await validatePostOwner(id, session.user?.email);
+    if (!validatePost) {
       res
         .status(403)
         .json({ error: 'You are not authorized to update this post' })
@@ -61,8 +61,8 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === 'DELETE') {
     try {
       const { postId: id, userEmail } = req.body
-      const validatePost = await getPostById(id)
-      if (session.user?.email !== validatePost.ownerId) {
+      const validatePost = await validatePostOwner(id, session.user?.email);
+      if (!validatePost) {
         res
         .status(403)
         .json({ error: 'You are not authorized to update this post' })

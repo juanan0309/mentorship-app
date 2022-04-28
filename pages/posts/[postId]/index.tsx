@@ -66,7 +66,6 @@ const PostDetailPage = ({ post, initialUpvoted, userEmail }: iProps) => {
           }),
         })
           .then((res) => {
-            console.log(res)
             if (res.status === 500) {
               Swal.fire({
                 title: 'Error',
@@ -157,12 +156,14 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   const postId = context.params?.postId
 
   if (!postId) {
-    context.res.writeHead(404, { Location: '/' })
+    context.res.writeHead(302, { Location: `/login?redirect=${context.req.url}` })
+    context.res.end()
     return { props: { posts: [], totalCount: 0 } }
   }
 
   if (!isString(postId)) {
-    context.res.writeHead(404, { Location: '/' })
+    context.res.writeHead(302, { Location: `/login?redirect=${context.req.url}` })
+    context.res.end()
     return { props: { posts: [], totalCount: 0 } }
   }
 
