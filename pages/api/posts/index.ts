@@ -25,9 +25,9 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 
   if (req.method === 'GET') {
     const { page, sortBy } = req.query
-    const skip = (+page - 1) * 10
+    const skip = (+page - 1) * 12
     const response = await getAllPosts(
-      10,
+      12,
       skip,
       validateString(sortBy, 'sortBy'),
     )

@@ -7,9 +7,10 @@ import ContentList from '../../components/ContentList'
 import PaginationButtons from '../../components/PaginationButtons'
 
 import classes from './MyPostsPage.module.css'
+import { PostTypes } from "../../utils/types"
 
 type iProps = {
-  posts: unknown
+  posts: PostTypes[]
   totalCount: number
   children?: ReactNode
 }
@@ -19,7 +20,7 @@ const MyPostsPage: NextPage<iProps> = (props: iProps) => {
   const { posts, totalCount } = props
   const page = router?.query?.page || 1
 
-  let nextButtonActive = +page === Math.ceil(totalCount / 10) ? true : false
+  let nextButtonActive = +page === Math.ceil(totalCount / 12) ? true : false
   let previousButtonActive = +page === 1 ? true : false
 
   const handleNextPage = () => {
@@ -33,12 +34,14 @@ const MyPostsPage: NextPage<iProps> = (props: iProps) => {
   return (
     <div className={classes.container}>
       <ContentList items={posts} />
-      <PaginationButtons
-        handleNextPage={handleNextPage}
-        handlePreviousPage={handlePreviousPage}
-        nextButtonActive={nextButtonActive}
-        previousButtonActive={previousButtonActive}
-      />
+      {totalCount > 0 && (
+        <PaginationButtons
+          handleNextPage={handleNextPage}
+          handlePreviousPage={handlePreviousPage}
+          nextButtonActive={nextButtonActive}
+          previousButtonActive={previousButtonActive}
+        />
+      )}
     </div>
   )
 }
@@ -54,9 +57,9 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   }
 
   const page = context.query?.page || 1
-  const skip = (+page - 1) * 10
+  const skip = (+page - 1) * 12
   let { posts, totalCount } = await getAllPostsByOwnerId(
-    10,
+    12,
     skip,
     session.user?.email,
   )

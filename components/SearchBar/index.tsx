@@ -2,9 +2,10 @@ import { Dispatch, SetStateAction, useState, KeyboardEvent } from 'react'
 import { TextField, Button } from '@mui/material'
 
 import classes from './SearchBar.module.css'
+import { PostTypes } from "../../utils/types"
 
 type searchBarProps = {
-  setPosts: Dispatch<any>
+  setPosts: Dispatch<PostTypes[]>
   setTotalCount: Dispatch<SetStateAction<number>>
 }
 

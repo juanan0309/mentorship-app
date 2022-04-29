@@ -5,9 +5,10 @@ import { useSession } from 'next-auth/react'
 import CreateForm from '../../../components/CreateForm'
 import { getPostById } from '../../../utils/api/dbUtils'
 import { isString, validatePostOwner } from '../../../utils/utilFunctions'
+import { PostTypes } from "../../../utils/types"
 
-type iProps = {
-  post: any
+interface iProps {
+  post: PostTypes
 }
 
 const EditPage = ({ post }: iProps) => {
@@ -16,7 +17,7 @@ const EditPage = ({ post }: iProps) => {
   return <CreateForm router={router} session={session} edit post={post} />
 }
 
-export const getServerSideProps: GetServerSideProps = async (context: any) => {
+export const getServerSideProps: GetServerSideProps = async (context) => {
   const session = await getSession(context)
   if (!session || !session.user || !session.user.email) {
     context.res.writeHead(302, { Location: `/login?redirect=${context.req.url}` })

@@ -24,6 +24,7 @@ const PaginationButtons = (props: iProps) => {
         color="primary"
         disabled={previousButtonActive}
         onClick={handlePreviousPage}
+        style={{ width: '110px'}}
       >
         Previous
       </Button>
@@ -32,6 +33,7 @@ const PaginationButtons = (props: iProps) => {
         color="primary"
         disabled={nextButtonActive}
         onClick={handleNextPage}
+        style={{ width: '110px'}}
       >
         Next
       </Button>

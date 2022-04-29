@@ -12,7 +12,7 @@ const CreateInterviewPage = () => {
   )
 }
 
-export const getServerSideProps: GetServerSideProps = async (context: any) => {
+export const getServerSideProps: GetServerSideProps = async (context) => {
   const session = await getSession(context)
   if (!session) {
     context.res.writeHead(302, { Location: `/login?redirect=${context.req.url}` })

@@ -12,9 +12,10 @@ import { isString } from '../../../utils/utilFunctions'
 const ReactQuill = dynamic(() => import('react-quill'), { ssr: false })
 
 import classes from './PostDetailPage.module.css'
+import { PostTypes } from '../../../utils/types'
 
 type iProps = {
-  post: any
+  post: PostTypes
   initialUpvoted: boolean
   children?: ReactNode
   userEmail: string
@@ -98,8 +99,12 @@ const PostDetailPage = ({ post, initialUpvoted, userEmail }: iProps) => {
       <div className={classes['header-container']}>
         <h1>{post.title}</h1>
         <div className={classes['text-container']}>
-          <p>By: {post.ownerId}</p>
-          <p>Client: {post.client}</p>
+          <p className={classes.strong}>
+            By: <span className={classes.light}>{post.ownerId}</span>
+          </p>
+          <p className={classes.strong}>
+            Client: <span className={classes.light}>{post.client}</span>
+          </p>
         </div>
         <div className={classes['likes-button']}>
           <p>{likes.count}</p>
@@ -148,7 +153,9 @@ const PostDetailPage = ({ post, initialUpvoted, userEmail }: iProps) => {
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const session = await getSession(context)
   if (!session) {
-    context.res.writeHead(302, { Location: `/login?redirect=${context.req.url}` })
+    context.res.writeHead(302, {
+      Location: `/login?redirect=${context.req.url}`,
+    })
     context.res.end()
     return { props: { posts: [], totalCount: 0 } }
   }
@@ -156,13 +163,17 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   const postId = context.params?.postId
 
   if (!postId) {
-    context.res.writeHead(302, { Location: `/login?redirect=${context.req.url}` })
+    context.res.writeHead(302, {
+      Location: `/login?redirect=${context.req.url}`,
+    })
     context.res.end()
     return { props: { posts: [], totalCount: 0 } }
   }
 
   if (!isString(postId)) {
-    context.res.writeHead(302, { Location: `/login?redirect=${context.req.url}` })
+    context.res.writeHead(302, {
+      Location: `/login?redirect=${context.req.url}`,
+    })
     context.res.end()
     return { props: { posts: [], totalCount: 0 } }
   }

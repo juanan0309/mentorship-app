@@ -8,6 +8,18 @@ type createPostValues = {
   content: string
 }
 
+type valuesTypes = {
+  _id?: string
+  ownerId?: string
+  title?: string
+  client?: string
+  content?: string
+  likes?: {
+    count: number
+    users: string[]
+  }
+}
+
 export async function connectDatabase() {
   const client = await mongoose.connect(
     process.env.NEXT_PUBLIC_MONGODB_URI || 'mongodb://localhost:27017/',
@@ -16,7 +28,7 @@ export async function connectDatabase() {
   return client
 }
 
-export async function getAllPosts( limit: number = 10, skip: number = 0, sortBy: string = 'createdAt' ) {
+export async function getAllPosts( limit: number = 12, skip: number = 0, sortBy: string = 'createdAt' ) {
   const client = await connectDatabase()
 
   const totalCount = await Post.count()
@@ -36,7 +48,7 @@ export async function getPostById(id: string) {
   return posts
 }
 
-export async function getFilteredPosts( search: string, limit: number = 10, skip: number = 0) {
+export async function getFilteredPosts( search: string, limit: number = 12, skip: number = 0) {
   const client = await connectDatabase()
 
   const posts = await Post.find({
@@ -58,7 +70,7 @@ export async function getFilteredPosts( search: string, limit: number = 10, skip
   return {posts, totalCount}
 }
 
-export async function getAllPostsByOwnerId( limit: number = 10, skip: number = 0, ownerId: string ) {
+export async function getAllPostsByOwnerId( limit: number = 12, skip: number = 0, ownerId: string ) {
   const client = await connectDatabase()
 
   const totalCount = await Post.count({ownerId})
@@ -70,7 +82,7 @@ export async function getAllPostsByOwnerId( limit: number = 10, skip: number = 0
   return {posts, totalCount}
 }
 
-export async function updatePost(id: string, values: any) {
+export async function updatePost(id: string, values: valuesTypes) {
   const client = await connectDatabase()
 
   const post = await Post.findByIdAndUpdate(id, values, { new: true })

@@ -7,9 +7,10 @@ import { ReactNode } from 'react'
 import { getAllPosts } from '../utils/api/dbUtils'
 import Home from '../components/Home'
 import { validateString } from '../utils/utilFunctions'
+import { PostTypes } from "../utils/types"
 
 type iProps = {
-  posts: unknown
+  posts: PostTypes[]
   totalCount: number
   children?: ReactNode
 }
@@ -36,7 +37,7 @@ const HomePage: NextPage<iProps> = (props: iProps) => {
     router.push(`?page=${+page - 1}&sort=${sortBy}`)
   }
 
-  let nextButtonActive = +page === Math.ceil(totalCount / 10) ? true : false
+  let nextButtonActive = +page === Math.ceil(totalCount / 12) ? true : false
   let previousButtonActive = +page === 1 ? true : false
 
   const handleSortChange = async (sortBy: string) => {
@@ -76,9 +77,9 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   }
   const page = context.query?.page || 1
   const sort = context.query?.sort || 'createdAt'
-  const skip = (+page - 1) * 10
+  const skip = (+page - 1) * 12
   let { posts, totalCount } = await getAllPosts(
-    10,
+    12,
     skip,
     validateString(sort, 'sort'),
   )

@@ -7,12 +7,13 @@ import { NextRouter } from 'next/router'
 import { Session } from 'next-auth'
 
 import classes from './CreateForm.module.css'
+import { PostTypes } from '../../utils/types'
 
-interface iProps {
+type iProps = {
   router: NextRouter
   session: Session | null
   edit?: boolean
-  post?: any
+  post?: PostTypes
 }
 
 type dataProps = {
@@ -24,7 +25,7 @@ type dataProps = {
     users: string[]
   }
   postId?: string
-  client?: string 
+  client?: string
 }
 
 const CreateForm = ({ router, session, edit = false, post }: iProps) => {
@@ -54,6 +55,15 @@ const CreateForm = ({ router, session, edit = false, post }: iProps) => {
           return errors
         }}
         onSubmit={(values, { setSubmitting }) => {
+          if (!values.title || !values.client || !values.content) {
+            Swal.fire({
+              title: 'Error',
+              text: 'Please fill all fields',
+              icon: 'error',
+            })
+            return
+          }
+
           if (!session || !session.user) {
             Swal.fire({
               title: 'Error',
@@ -73,7 +83,7 @@ const CreateForm = ({ router, session, edit = false, post }: iProps) => {
             data.postId = post?._id
             data.likes = post?.likes
           }
-          const fetchOptions = edit
+          const fetchoptions = edit
             ? {
                 method: 'PUT',
                 message: 'Post edited',
@@ -82,7 +92,7 @@ const CreateForm = ({ router, session, edit = false, post }: iProps) => {
             : { method: 'POST', message: 'Post created', redirect: '/' }
 
           fetch('/api/posts', {
-            method: fetchOptions.method,
+            method: fetchoptions.method,
             headers: {
               'Content-Type': 'application/json',
             },
@@ -97,14 +107,14 @@ const CreateForm = ({ router, session, edit = false, post }: iProps) => {
                   text: res.error,
                   icon: 'error',
                   confirmButtonText: 'Return',
-                }).then(() => router.push(fetchOptions.redirect))
+                }).then(() => router.push(fetchoptions.redirect))
               } else {
                 Swal.fire({
                   title: 'Thank you!',
-                  text: fetchOptions.message,
+                  text: fetchoptions.message,
                   icon: 'success',
                   confirmButtonText: 'Go Back',
-                }).then(() => router.push(fetchOptions.redirect))
+                }).then(() => router.push(fetchoptions.redirect))
               }
             })
             .catch((err) => {

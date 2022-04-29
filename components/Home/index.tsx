@@ -1,4 +1,5 @@
 import { Dispatch, SetStateAction } from 'react'
+import { PostTypes } from "../../utils/types"
 import ContentList from '../ContentList'
 import PaginationButtons from '../PaginationButtons'
 import SearchBar from '../SearchBar'
@@ -7,8 +8,8 @@ import SortInput from '../SortInput'
 import classes from './Home.module.css'
 
 interface iProps {
-  posts: unknown
-  setPosts: Dispatch<unknown>
+  posts: PostTypes[]
+  setPosts: Dispatch<PostTypes[]>
   setTotalCount: Dispatch<SetStateAction<number>>
   sortBy: string
   setSortBy: Dispatch<SetStateAction<string>>

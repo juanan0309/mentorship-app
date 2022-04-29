@@ -1,8 +1,9 @@
 import ItemCard from '../ItemCard'
 import { Grid } from '@mui/material'
+import { PostTypes } from "../../utils/types"
 
 type iContentListProps = {
-  items: any
+  items: PostTypes[]
 }
 
 const ContentList = ({ items }: iContentListProps) => {
@@ -12,7 +13,7 @@ const ContentList = ({ items }: iContentListProps) => {
     </div>
   ) : (
     <Grid container spacing={2} justifyContent='center'>
-      {items.map((item: any) => (
+      {items.map((item: PostTypes) => (
         <ItemCard key={item._id} {...item} />
       ))}
     </Grid>
